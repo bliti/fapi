@@ -35,7 +35,7 @@ def upload_file():
         return jsonify(message="File uploaded successfully.")
     
     except:
-        return jsonify(message="Error uploading file.")
+        return jsonify(message="Error uploading file."), 500
         
 
 #for testing only, as Nginx or Apache would be serving the static files (faster, less overhead).
@@ -46,7 +46,7 @@ def uploaded_file(filename):
         return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
     
     except IOError as e:
-        return jsonify(message=e)
+        return jsonify(message=e), 500
 
 
 if __name__ == "__main__":
