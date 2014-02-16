@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for, jsonify,\
+from flask import Flask, request, jsonify,\
     send_from_directory
 
 from werkzeug.utils import secure_filename
@@ -25,15 +25,18 @@ def index():
 @app.route('/upload', methods=['POST'])
 def upload_file():
     """upload a file to the server"""
-    try:
+    try:       
         file = request.files['file']
-        if file and allowed_file(file.filename):
+        if file:
+            if not allowed_file(file.filename):
+                return jsonify(message="File type not allowed"), 500
+
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('uploaded_file',
-                                filename=filename))
-        return jsonify(message="File uploaded successfully.")
-    
+            return jsonify(message="File uploaded successfully.")
+        else:
+            return jsonify(message="No file sent in request."), 500
+
     except:
         return jsonify(message="Error uploading file."), 500
         
@@ -49,5 +52,6 @@ def uploaded_file(filename):
         return jsonify(message=e), 500
 
 
+#run run run your boat!
 if __name__ == "__main__":
     app.run()
