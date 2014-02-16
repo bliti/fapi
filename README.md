@@ -10,3 +10,8 @@ You may upload and download files, but it lacks any other functionality at the m
 Next:
 
 - token based auth
+
+
+####Requires requests library in order to run the simple tests included.
+
+    pip install requests
